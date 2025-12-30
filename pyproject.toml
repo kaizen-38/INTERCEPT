@@ -1,0 +1,97 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "intercept"
+version = "0.1.0"
+description = "Intervention Reinforcement Control for Epidemic Prevention Transmission"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "kaizen-38"}
+]
+keywords = [
+    "reinforcement-learning",
+    "graph-neural-networks",
+    "epidemic-control",
+    "network-science",
+    "cascade-control",
+    "GRPO",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.0.0",
+    "numpy>=1.24.0",
+    "networkx>=3.0",
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+    "scipy>=1.10.0",
+    "pandas>=2.0.0",
+    "tqdm>=4.65.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.3.0",
+    "black>=23.3.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+]
+jupyter = [
+    "jupyter>=1.0.0",
+    "ipywidgets>=8.0.0",
+]
+viz = [
+    "plotly>=5.14.0",
+    "pillow>=9.5.0",
+]
+all = [
+    "intercept[dev,jupyter,viz]",
+    "tensorboard>=2.13.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/kaizen-38/INTERCEPT"
+Repository = "https://github.com/kaizen-38/INTERCEPT"
+Issues = "https://github.com/kaizen-38/INTERCEPT/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+    | \.venv
+    | venv
+    | build
+    | dist
+)/
+'''
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+

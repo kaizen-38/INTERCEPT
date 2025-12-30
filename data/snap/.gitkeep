@@ -1,8 +1,2 @@
-# This directory holds SNAP dataset files
-# Download from https://snap.stanford.edu/data/
-# 
-# Supported datasets:
-# - email-Eu-core.txt (Email-Eu-core network)
-# - ca-GrQc.txt (Collaboration network)
-# - facebook_combined.txt (Facebook social circles)
-
+# Keep this directory for SNAP dataset files
+# Download datasets from https://snap.stanford.edu/data/

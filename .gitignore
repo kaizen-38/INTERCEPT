@@ -96,13 +96,16 @@ dmypy.json
 Thumbs.db
 
 # Project-specific
-checkpoints/
 *.pt
 *.pth
 
 # Data files (keep structure, ignore large files)
 data/snap/*.txt
 !data/snap/.gitkeep
+
+# Keep empty directories
+!checkpoints/.gitkeep
+!notebooks/.gitkeep
 
 # Results (training outputs)
 results/*/checkpoints/*.pt
