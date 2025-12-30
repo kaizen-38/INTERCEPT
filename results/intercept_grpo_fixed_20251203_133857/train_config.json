@@ -1,0 +1,21 @@
+{
+  "node_feature_dim": 5,
+  "n_time_bins": 5,
+  "hidden_dim": 128,
+  "total_groups": 500,
+  "group_size": 16,
+  "max_steps_per_trajectory": 50,
+  "gamma": 0.99,
+  "learning_rate": 0.0001,
+  "clip_epsilon": 0.2,
+  "entropy_coef": 0.02,
+  "max_grad_norm": 0.5,
+  "weight_decay": 1e-05,
+  "infection_penalty_weight": 2.0,
+  "intervention_cost_weight": 0.05,
+  "use_shaped_rewards": true,
+  "log_root": "results",
+  "save_every_groups": 25,
+  "device": "cpu",
+  "seed": 42
+}
