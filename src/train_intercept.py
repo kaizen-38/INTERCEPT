@@ -217,12 +217,14 @@ def rollout_final_objective(
             state["node_mask"], dtype=torch.float32, device=device
         ).unsqueeze(0)
 
-        # Sample action from policy
-        sample = policy.sample_action(node_features, adj_matrix, node_mask)
+        # Sample action from policy with forced delay=0 for consistency.
+        # forced_delay ensures the logged log_prob matches (node_id, delay=0).
+        sample = policy.sample_action(
+            node_features, adj_matrix, node_mask, forced_delay=0
+        )
 
         node_id = int(sample["node_id"][0].item())
-        # Force immediate intervention for this training phase
-        delay = 0
+        delay = int(sample["delay"][0].item())
         log_prob = float(sample["log_prob"][0].item())
 
         action = {"node_id": node_id, "delay": delay}

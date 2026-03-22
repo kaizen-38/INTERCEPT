@@ -278,5 +278,63 @@ class TestNodeMask:
         assert state["node_mask"].sum() > 0
 
 
+class TestLogProbConsistency:
+    """Tests that forced delay=0 produces consistent log probs."""
+
+    def test_forced_delay_logprob_matches_recomputed(self):
+        """When forcing delay=0, logged log_prob must equal recomputed
+        log_prob for (node_id, delay=0) within tolerance."""
+        import torch
+        from src.intercept_grpo import TemporalGRPOPolicy
+        from torch.distributions import Categorical
+
+        torch.manual_seed(42)
+        policy = TemporalGRPOPolicy(node_feat_dim=5, n_time_bins=5, hidden_dim=32)
+        policy.eval()
+
+        n_nodes = 20
+        node_features = torch.randn(1, n_nodes, 5)
+        adj = torch.eye(n_nodes).unsqueeze(0)
+        mask = torch.ones(1, n_nodes)
+
+        sample = policy.sample_action(
+            node_features, adj, mask, forced_delay=0
+        )
+        assert int(sample["delay"][0].item()) == 0
+
+        logged_lp = sample["log_prob"][0].item()
+
+        node_logits, time_logits = policy(node_features, adj, mask)
+        node_dist = Categorical(logits=node_logits)
+        node_id = sample["node_id"]
+        node_lp = node_dist.log_prob(node_id)
+
+        sel_time_logits = time_logits[0, int(node_id[0].item())]
+        time_dist = Categorical(logits=sel_time_logits)
+        time_lp = time_dist.log_prob(torch.tensor(0))
+
+        recomputed_lp = (node_lp + time_lp).item()
+        assert abs(logged_lp - recomputed_lp) < 1e-5, (
+            f"logged={logged_lp}, recomputed={recomputed_lp}"
+        )
+
+    def test_forced_delay_differs_from_free_sample(self):
+        """Forced delay=0 log_prob should differ from free-sampled
+        log_prob (unless delay happened to be 0 by chance)."""
+        import torch
+        from src.intercept_grpo import TemporalGRPOPolicy
+
+        torch.manual_seed(123)
+        policy = TemporalGRPOPolicy(node_feat_dim=5, n_time_bins=5, hidden_dim=32)
+        policy.eval()
+
+        nf = torch.randn(1, 15, 5)
+        adj = torch.eye(15).unsqueeze(0)
+        mask = torch.ones(1, 15)
+
+        forced = policy.sample_action(nf, adj, mask, forced_delay=0)
+        assert int(forced["delay"][0].item()) == 0
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

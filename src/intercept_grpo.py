@@ -190,6 +190,7 @@ class TemporalGRPOPolicy(nn.Module):
         adj_matrix: torch.Tensor,  # (B, N, N)
         node_mask: torch.Tensor | None = None,  # (B, N)
         deterministic: bool = False,
+        forced_delay: int | None = None,
     ) -> Dict[str, torch.Tensor]:
         """Sample an action from the policy.
         
@@ -198,6 +199,8 @@ class TemporalGRPOPolicy(nn.Module):
             adj_matrix: Adjacency matrix, shape (batch, nodes, nodes)
             node_mask: Optional mask for valid nodes
             deterministic: If True, select argmax instead of sampling
+            forced_delay: If set, override sampled delay with this value
+                and compute log_prob consistently for the forced delay.
         
         Returns:
             Dictionary with keys:
@@ -214,7 +217,6 @@ class TemporalGRPOPolicy(nn.Module):
 
         node_logits, time_logits = self.forward(node_features, adj_matrix, node_mask)
 
-        # Sample or select node
         node_dist = Categorical(logits=node_logits)
         if deterministic:
             node_id = node_logits.argmax(dim=-1)
@@ -223,19 +225,19 @@ class TemporalGRPOPolicy(nn.Module):
         node_log_prob = node_dist.log_prob(node_id)
         node_entropy = node_dist.entropy()
 
-        # Get time logits for selected node and sample delay
         batch_idx = torch.arange(node_id.shape[0], device=device)
         selected_time_logits = time_logits[batch_idx, node_id]  # (B, T)
 
         time_dist = Categorical(logits=selected_time_logits)
-        if deterministic:
+        if forced_delay is not None:
+            delay = torch.full_like(node_id, forced_delay)
+        elif deterministic:
             delay = selected_time_logits.argmax(dim=-1)
         else:
             delay = time_dist.sample()
         time_log_prob = time_dist.log_prob(delay)
         time_entropy = time_dist.entropy()
 
-        # Combined log prob and entropy
         log_prob = node_log_prob + time_log_prob
         entropy = node_entropy + time_entropy
 

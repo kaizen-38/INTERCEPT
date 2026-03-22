@@ -1,0 +1,66 @@
+{
+  "Random": {
+    "mean_infected": 27.03,
+    "std_infected": 12.62810753834477,
+    "median_infected": 28.0,
+    "min_infected": 4,
+    "max_infected": 50,
+    "mean_protected": 10.0
+  },
+  "Degree Centrality": {
+    "mean_infected": 10.04,
+    "std_infected": 5.098862618270863,
+    "median_infected": 9.0,
+    "min_infected": 3,
+    "max_infected": 28,
+    "mean_protected": 10.0
+  },
+  "PageRank": {
+    "mean_infected": 9.18,
+    "std_infected": 4.576854815263425,
+    "median_infected": 8.0,
+    "min_infected": 2,
+    "max_infected": 23,
+    "mean_protected": 10.0
+  },
+  "Betweenness": {
+    "mean_infected": 10.16,
+    "std_infected": 4.4580713318653835,
+    "median_infected": 10.0,
+    "min_infected": 2,
+    "max_infected": 22,
+    "mean_protected": 10.0
+  },
+  "Closeness": {
+    "mean_infected": 10.26,
+    "std_infected": 4.5686321804233705,
+    "median_infected": 10.0,
+    "min_infected": 2,
+    "max_infected": 25,
+    "mean_protected": 10.0
+  },
+  "K-Shell": {
+    "mean_infected": 13.36,
+    "std_infected": 7.2118236251311645,
+    "median_infected": 12.0,
+    "min_infected": 3,
+    "max_infected": 33,
+    "mean_protected": 10.0
+  },
+  "INTERCEPT (GRPO)": {
+    "mean_infected": 20.04,
+    "std_infected": 9.756966741769697,
+    "median_infected": 20.0,
+    "min_infected": 1,
+    "max_infected": 44,
+    "mean_protected": 3.77
+  },
+  "INTERCEPT (no timing)": {
+    "mean_infected": 2.8,
+    "std_infected": 4.228474902373195,
+    "median_infected": 1.0,
+    "min_infected": 0,
+    "max_infected": 23,
+    "mean_protected": 9.33
+  }
+}
